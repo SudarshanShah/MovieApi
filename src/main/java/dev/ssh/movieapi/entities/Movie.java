@@ -2,10 +2,7 @@ package dev.ssh.movieapi.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -38,10 +35,9 @@ public class Movie {
     private Set<String> movieCast;
 
     @Column(nullable = false)
-    @NotBlank(message = "Please provide movie's poster name!")
-    private String poster;
+    private Integer releaseYear;
 
     @Column(nullable = false)
-    @NotBlank(message = "Please provide movie's release year!")
-    private Integer releaseYear;
+    @NotBlank(message = "Please provide movie's poster name!")
+    private String poster;
 }
