@@ -2,7 +2,6 @@ package dev.ssh.movieapi.services;
 
 import dev.ssh.movieapi.dtos.MovieDto;
 import dev.ssh.movieapi.dtos.MoviePageResponse;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
