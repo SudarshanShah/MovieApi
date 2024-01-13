@@ -22,4 +22,14 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleEmptyFileException(EmptyFileException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ProblemDetail handleTokenNotFoundException(TokenNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ProblemDetail handleTokenExpiredException(TokenExpiredException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 }

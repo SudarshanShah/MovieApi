@@ -9,6 +9,7 @@ import dev.ssh.movieapi.services.MovieService;
 import dev.ssh.movieapi.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/movie/")
+@RequestMapping("/movie/")
 public class MovieController {
 
     private final MovieService movieService;
@@ -25,6 +26,7 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/add-movie")
     public ResponseEntity<MovieDto> addMovieHandler(@RequestPart String movieDto,
                                                     @RequestPart MultipartFile file) throws IOException {

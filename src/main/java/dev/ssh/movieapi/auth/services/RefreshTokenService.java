@@ -4,6 +4,9 @@ import dev.ssh.movieapi.auth.entities.RefreshToken;
 import dev.ssh.movieapi.auth.entities.User;
 import dev.ssh.movieapi.auth.repositories.RefreshTokenRepository;
 import dev.ssh.movieapi.auth.repositories.UserRepository;
+import dev.ssh.movieapi.exceptions.TokenExpiredException;
+import dev.ssh.movieapi.exceptions.TokenNotFoundException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,15 +25,17 @@ public class RefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(String username) {
-        User user = userRepository.findByUsername(username).get();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + username));
         RefreshToken refreshToken = user.getRefreshToken();
 
         if (refreshToken == null) {
-            long refreshTokenValidity = 5 * 60 * 60 * 10000;
+            long refreshTokenValidity = 30 * 1000;
             refreshToken = RefreshToken.builder()
                     .refreshToken(UUID.randomUUID().toString())
                     .expirationTime(Instant.now().plusMillis(refreshTokenValidity))
-                    .user(userRepository.findByUsername(username).get())
+                    .user(userRepository.findByEmail(username)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + username)))
                     .build();
 
             refreshTokenRepository.save(refreshToken);
@@ -41,11 +46,12 @@ public class RefreshTokenService {
 
     public RefreshToken verifyRefreshToken(String refreshToken) {
         RefreshToken refreshTokenOb = refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("refresh token not exist"));
+                .orElseThrow(() -> new TokenNotFoundException("refresh token not exist"));
 
         if (refreshTokenOb.getExpirationTime().compareTo(Instant.now()) < 0) {
+            System.out.println("Entered here ....");
             refreshTokenRepository.delete(refreshTokenOb);
-            throw new RuntimeException("Refresh Token expired");
+            throw new TokenExpiredException("Refresh Token expired");
         }
 
         return refreshTokenOb;
