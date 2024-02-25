@@ -67,6 +67,7 @@ public class ForgotPasswordController {
         ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user).orElseThrow(() -> new RuntimeException("Invalid OTP for email : " + email));
 
         if (fp.getExpirationTime().before(Date.from(Instant.now()))) {
+            forgotPasswordRepository.deleteById(fp.getFpid());
             return new ResponseEntity<>("OTP has expired!", HttpStatus.EXPECTATION_FAILED);
         }
 
