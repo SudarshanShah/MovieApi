@@ -20,6 +20,7 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/forgotPassword")
+@CrossOrigin(origins = "*")
 public class ForgotPasswordController {
 
     private final EmailService emailService;

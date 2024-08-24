@@ -3,13 +3,11 @@ package dev.ssh.movieapi.controllers;
 import dev.ssh.movieapi.services.EmailService;
 import dev.ssh.movieapi.dtos.MailBody;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/mail")
+@CrossOrigin(origins = "*")
 public class MailController {
 
     private final EmailService emailService;

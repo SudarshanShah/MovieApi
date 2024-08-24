@@ -41,6 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // condition to check if token is NULL and
         // does not start with keyword "Bearer "
         // pass to next filter, and return
+        System.out.println("Auth header = " + authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -50,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         // extract username from JWT
         userEmail = jwtService.extractUsername(jwt);
-
+        System.out.println("userEmail = " + userEmail);
         /*
          * if username is not null and user not authenticated
          * get UserDetails from username
@@ -74,6 +75,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("Filter completed!");
             }
         }
 
