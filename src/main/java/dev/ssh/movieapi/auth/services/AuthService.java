@@ -32,7 +32,6 @@ public class AuthService {
         var user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.USER)
                 .build();
@@ -41,7 +40,6 @@ public class AuthService {
         var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
         return AuthResponse.builder()
                 .name(savedUser.getName())
-                .username(savedUser.getUsername())
                 .email(savedUser.getEmail())
                 .token(jwt)
                 .refreshToken(refreshToken.getRefreshToken())
@@ -68,7 +66,6 @@ public class AuthService {
         var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
         return AuthResponse.builder()
                 .name(user.getName())
-                .username(user.getUsername())
                 .email(user.getEmail())
                 .token(jwt)
                 .refreshToken(refreshToken.getRefreshToken())

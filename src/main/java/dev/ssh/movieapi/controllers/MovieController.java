@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movie/")
+@RequestMapping("/api/v1/movie/")
 @CrossOrigin(origins = "*")
 public class MovieController {
 

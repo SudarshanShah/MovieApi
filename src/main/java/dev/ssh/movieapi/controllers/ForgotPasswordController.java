@@ -48,12 +48,16 @@ public class ForgotPasswordController {
 
         ForgotPassword fp = ForgotPassword.builder()
                         .otp(otp)
-                        .expirationTime(new Date(System.currentTimeMillis() + 70 * 1000))
+                        .expirationTime(new Date(System.currentTimeMillis() + 70 * 100000))
                         .user(user)
                         .build();
 
-        emailService.sendSimpleMessage(mailBody);
+        ForgotPassword fp1 = forgotPasswordRepository.findByOtpAndUser(otp, user).orElseThrow(() -> new RuntimeException("Invalid OTP for email : " + email));
 
+        if (fp1.getExpirationTime().before(Date.from(Instant.now()))) {
+            forgotPasswordRepository.deleteById(fp1.getFpid());
+        }
+        emailService.sendSimpleMessage(mailBody);
         forgotPasswordRepository.save(fp);
 
         return ResponseEntity.ok("Email sent for verification!");
@@ -77,7 +81,7 @@ public class ForgotPasswordController {
 
     // set the new password
     @PostMapping("/changePassword/{email}")
-    public ResponseEntity<?> forgotPasswordHandler(@RequestBody ChangePassword changePassword,
+    public ResponseEntity<String> forgotPasswordHandler(@RequestBody ChangePassword changePassword,
                                                    @PathVariable String email) {
         if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
             return new ResponseEntity<>("Please enter the password again!", HttpStatus.EXPECTATION_FAILED);

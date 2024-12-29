@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     // endpoint to authenticate user for login
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticate(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
